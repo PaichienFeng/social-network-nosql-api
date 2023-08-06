@@ -74,7 +74,7 @@ const names = [
   'Parker',
 ];
 
-const appDescriptions = [
+const appThoughts = [
   'Decision Tracker',
   'Find My Phone',
   'Learn Piano',
@@ -107,7 +107,7 @@ const getRandomAssignments = (int) => {
   const results = [];
   for (let i = 0; i < int; i++) {
     results.push({
-      assignmentName: getRandomArrItem(appDescriptions),
+      thoughtName: getRandomArrItem(appThoughts),
       score: Math.floor(Math.random() * (99 - 70 + 1) + 70),
     });
   }
