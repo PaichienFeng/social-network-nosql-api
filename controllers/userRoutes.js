@@ -38,8 +38,10 @@ router.get('/users', async (req, res) => {
 // create a new user
 router.post('/users', async (req, res) => {
   User.create({
-    username,
-    email,
+    username: req.body.username,
+    email: req.body.email,
+    thoughts: req.body.thoughts,
+    friends: req.body.friends,
   })
     .then((user) => res.json(user))
     .catch((err) => res.status(500).json(err));
@@ -53,6 +55,8 @@ router.put('/users/:userId', async (req, res) => {
       $set: {
         username: req.body.username,
         email: req.body.email,
+        thoughts: req.body.thoughts,
+        friends: req.body.friends,
       }
     },
     { runValidators: true, new: true }
@@ -66,14 +70,14 @@ router.put('/users/:userId', async (req, res) => {
 })
 
 // Delete a user and remove them from the thought
-router.put('/users/:userId', async (req, res) => {
+router.delete('/users/:userId', async (req, res) => {
   User.findOneAndRemove({ _id: req.params.userId })
     .then((user) =>
       !user
         ? res.status(404).json({ message: 'No such user exists' })
         : Thought.findOneAndUpdate(
-          { username: req.params.userId },
-          { $pull: { username: req.params.userId } },
+          { userId: req.params.userId },
+          { $pull: { userId: req.params.userId } },
           { new: true }
         )
     )
@@ -88,47 +92,4 @@ router.put('/users/:userId', async (req, res) => {
       console.log(err);
       res.status(500).json(err);
     });
-}),
-
-
-
-
-
-
-
-
-//   // Add an assignment to a student
-//   addAssignment(req, res) {
-//   console.log('You are adding an assignment');
-//   console.log(req.body);
-//   Student.findOneAndUpdate(
-//     { _id: req.params.studentId },
-//     { $addToSet: { assignments: req.body } },
-//     { runValidators: true, new: true }
-//   )
-//     .then((student) =>
-//       !student
-//         ? res
-//           .status(404)
-//           .json({ message: 'No student found with that ID :(' })
-//         : res.json(student)
-//     )
-//     .catch((err) => res.status(500).json(err));
-// },
-// // Remove assignment from a student
-// removeAssignment(req, res) {
-//   Student.findOneAndUpdate(
-//     { _id: req.params.studentId },
-//     { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
-//     { runValidators: true, new: true }
-//   )
-//     .then((student) =>
-//       !student
-//         ? res
-//           .status(404)
-//           .json({ message: 'No student found with that ID :(' })
-//         : res.json(student)
-//     )
-//     .catch((err) => res.status(500).json(err));
-// }
-
+})
