@@ -84,8 +84,8 @@ router.delete('/users/:userId', async (req, res) => {
     )
     .then((thought) =>
       !thought.deletedCount
-        ? res.status(404).json({
-          message: 'User deleted, but no thought found',
+        ? res.status(200).json({
+          message: 'User deleted with no thought found',
         })
         : res.json({ message: 'User successfully deleted' })
     )
