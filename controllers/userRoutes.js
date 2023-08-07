@@ -1,5 +1,5 @@
-const { User, Thought } = require('../models');
 const router = require('express').Router();
+const { User, Thought } = require('../models');
 
 // Get a single user
 router.get('/users/:userId', async (req, res) => {
@@ -44,7 +44,10 @@ router.post('/users', async (req, res) => {
     friends: req.body.friends,
   })
     .then((user) => res.json(user))
-    .catch((err) => res.status(500).json(err));
+    .catch((err) => {
+      res.status(500).json(err);
+      console.log(err);
+    });
 })
 
 // update an user by id
@@ -93,3 +96,52 @@ router.delete('/users/:userId', async (req, res) => {
       res.status(500).json(err);
     });
 })
+
+// Add a friend to a user
+router.post('/users/:userId/friends/:friendId', async (req, res) => {
+  console.log('You are adding a friend');
+  console.log(req.body);
+  User.findOneAndUpdate(
+    { _id: req.params.userId },
+    {
+      $addToSet: {
+        friends: req.params.friendId
+      }
+    },
+    { runValidators: true, new: true }
+  )
+    .then((friend) =>
+      !friend
+        ? res
+          .status(404)
+          .json({ message: 'No friend found with that ID :(' })
+        : res.json(friend)
+    )
+    .catch((err) => res.status(500).json(err));
+})
+
+
+  // Delete a friend to a user
+  router.post('/users/:userId/friends/:friendId', async (req, res) => {
+    console.log('You are adding a friend');
+    console.log(req.body);
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { 
+        friends: {
+          friends: req.params.friendIdId
+        } 
+       } },
+      { runValidators: true, new: true }
+    )
+      .then((friend) =>
+        !friend
+          ? res
+            .status(404)
+            .json({ message: 'No friend found with that ID :(' })
+          : res.json(friend)
+      )
+      .catch((err) => res.status(500).json(err));
+  })
+
+module.exports = router;

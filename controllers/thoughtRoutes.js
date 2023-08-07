@@ -1,4 +1,6 @@
+const router = require('express').Router();
 const { User, Thought } = require('../models');
+const { ObjectId } = require('mongoose').Types;
 
 
 // Get all thoughts
@@ -37,13 +39,16 @@ router.get('/thoughts/:thoughtId', async (req, res) => {
 
 // Create a thought
 router.post('/thoughts', async (req, res) => {
+  console.log('nono');
+
   Thought.create({
     thoughtText: req.body.thoughtText,
     username: req.body.username,
-    userId: req.body.userId,
+    userId: ObjectId(req.body.userId),
     reactions: req.body.reactions,
   })
     .then((thought) => {
+      console.log('haah');
       User.findOneAndUpdate(
         { _id: req.body.userId },
         { $addToSet: { thoughts: thought._id } },
@@ -155,3 +160,6 @@ router.post('/thoughts/:thoughtId/reactions', async (req, res) => {
       )
       .catch((err) => res.status(500).json(err));
   })
+
+  
+module.exports = router;
