@@ -1,4 +1,4 @@
-const { Schema, model, Types} = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 const dayjs = require('dayjs');
 
 const reactionSchema = new Schema(
@@ -24,22 +24,23 @@ const reactionSchema = new Schema(
   {
     toJSON: {
       getters: true,
+      transform: (doc, ret) => {
+        ret.createdAt = dayjs(ret.createdAt).format('DD MMM, YYYY HH:mm');
+        return ret;
+      },
     },
     id: false,
   }
 );
 
-reactionSchema.virtual('formattedTime').get(function(){
-  return dayjs(this.createdAt).format('DDDD MM, YYYY')
-});
 
 const thoughtSchema = new Schema(
   {
     thoughtText: {
       type: String,
       required: true,
-      minlength:1,
-      maxlength:280,
+      minlength: 1,
+      maxlength: 280,
     },
     createdAt: {
       type: Date,
@@ -60,16 +61,16 @@ const thoughtSchema = new Schema(
     toJSON: {
       getters: true,
       virtuals: true,
+      transform: (doc, ret) => {
+        ret.createdAt = dayjs(ret.createdAt).format('DD MMM, YYYY HH:mm');
+        return ret;
+      },
     },
     id: false,
   }
 );
 
-thoughtSchema.virtual('formattedTime').get(function(){
-  return dayjs(this.createdAt).format('DDDD MM, YYYY')
-});
-
-thoughtSchema.virtual('reactionCount').get(function(){
+thoughtSchema.virtual('reactionCount').get(function () {
   return this.reactions.length;
 })
 

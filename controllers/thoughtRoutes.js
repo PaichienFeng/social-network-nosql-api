@@ -139,7 +139,7 @@ router.post('/thoughts/:thoughtId/reactions', async (req, res) => {
 
 
   // Delete a reaction to a thought
-  router.post('/thoughts/:thoughtId/reactions/:reactionId', async (req, res) => {
+  router.delete('/thoughts/:thoughtId/reactions/:reactionId', async (req, res) => {
     console.log('You are adding a reaction');
     console.log(req.body);
     Thought.findOneAndUpdate(

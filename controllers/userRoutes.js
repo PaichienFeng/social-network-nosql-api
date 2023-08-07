@@ -121,27 +121,27 @@ router.post('/users/:userId/friends/:friendId', async (req, res) => {
 })
 
 
-  // Delete a friend to a user
-  router.post('/users/:userId/friends/:friendId', async (req, res) => {
-    console.log('You are adding a friend');
-    console.log(req.body);
-    User.findOneAndUpdate(
-      { _id: req.params.userId },
-      { $pull: { 
-        friends: {
-          friends: req.params.friendIdId
-        } 
-       } },
-      { runValidators: true, new: true }
+// Delete a friend to a user
+router.delete('/users/:userId/friends/:friendId', async (req, res) => {
+  console.log('You are adding a friend');
+  console.log(req.body);
+  User.findOneAndUpdate(
+    { _id: req.params.userId },
+    {
+      $pull: {
+        friends: req.params.friendId
+      }
+    },
+    { runValidators: true, new: true }
+  )
+    .then((friend) =>
+      !friend
+        ? res
+          .status(404)
+          .json({ message: 'No friend found with that ID :(' })
+        : res.json(friend)
     )
-      .then((friend) =>
-        !friend
-          ? res
-            .status(404)
-            .json({ message: 'No friend found with that ID :(' })
-          : res.json(friend)
-      )
-      .catch((err) => res.status(500).json(err));
-  })
+    .catch((err) => res.status(500).json(err));
+})
 
 module.exports = router;
