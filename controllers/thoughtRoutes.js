@@ -88,7 +88,7 @@ router.put('/thoughts/:thoughtId', async (req, res) => {
 
 // Delete a thought
 router.delete('/thoughts/:thoughtId', async (req, res) => {
-  Thought.findOneAndRemove({ _id: req.params.thoughtIdId })
+  Thought.findOneAndRemove({ _id: req.params.thoughtId })
     .then((thought) =>
       !thought
         ? res.status(404).json({ message: 'No such thought exists' })
@@ -98,10 +98,10 @@ router.delete('/thoughts/:thoughtId', async (req, res) => {
           { new: true }
         )
     )
-    .then((thought) =>
-      !thought
+    .then((user) =>
+      !user
         ? res.status(404).json({
-          message: 'Thought deleted, but no thought found',
+          message: 'Thought deleted, but no user found',
         })
         : res.json({ message: 'Thought successfully deleted' })
     )

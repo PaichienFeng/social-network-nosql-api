@@ -78,14 +78,12 @@ router.delete('/users/:userId', async (req, res) => {
     .then((user) =>
       !user
         ? res.status(404).json({ message: 'No such user exists' })
-        : Thought.findOneAndUpdate(
-          { userId: req.params.userId },
-          { $pull: { userId: req.params.userId } },
-          { new: true }
+        : Thought.deleteMany(
+          { userId: req.params.userId }
         )
     )
     .then((thought) =>
-      !thought
+      !thought.deletedCount
         ? res.status(404).json({
           message: 'User deleted, but no thought found',
         })
