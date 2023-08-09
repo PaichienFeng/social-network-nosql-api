@@ -24,10 +24,8 @@ router.get('/users/:userId', async (req, res) => {
 router.get('/users', async (req, res) => {
   User.find()
     .then(async (users) => {
-      const userObj = {
-        users,
-      };
-      return res.json(userObj);
+ 
+      return res.json(users);
     })
     .catch((err) => {
       console.log(err);

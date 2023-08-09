@@ -7,10 +7,8 @@ const { ObjectId } = require('mongoose').Types;
 router.get('/thoughts', async (req, res) => {
   Thought.find()
     .then(async (thoughts) => {
-      const thoughtObj = {
-        thoughts,
-      };
-      return res.json(thoughtObj);
+
+      return res.json(thoughts);
     })
     .catch((err) => {
       console.log(err);
